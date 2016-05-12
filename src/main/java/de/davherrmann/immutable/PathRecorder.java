@@ -1,4 +1,4 @@
-package de.davherrmann.efficiently.immutable;
+package de.davherrmann.immutable;
 
 import static com.google.common.base.Defaults.defaultValue;
 import static java.util.Collections.emptyList;

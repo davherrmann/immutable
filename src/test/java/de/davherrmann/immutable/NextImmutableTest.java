@@ -1,4 +1,4 @@
-package de.davherrmann.efficiently.immutable;
+package de.davherrmann.immutable;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;

@@ -1,7 +1,5 @@
-package de.davherrmann.efficiently.immutable;
+package de.davherrmann.immutable;
 
-import static de.davherrmann.efficiently.immutable.Compare.areEqual;
-import static de.davherrmann.efficiently.immutable.Copy.defensiveCopyOf;
 import static java.util.stream.Collectors.toMap;
 
 import java.util.AbstractMap.SimpleEntry;
@@ -22,7 +20,7 @@ public class NextImmutable
 
         if (path.size() == 1 || nestedValue == null)
         {
-            return defensiveCopyOf(nestedValue);
+            return Copy.defensiveCopyOf(nestedValue);
         }
 
         return getInPath(dataStructure(nestedValue), path.subList(1, path.size()));
@@ -46,7 +44,7 @@ public class NextImmutable
             .flatMap(Collection::stream) //
             .collect(toMap( //
                 Entry::getKey, //
-                e -> defensiveCopyOf(e.getValue()), //
+                e -> Copy.defensiveCopyOf(e.getValue()), //
                 (oldValue, newValue) -> isDataStructure(oldValue) && isDataStructure(newValue)
                     ? merge(dataStructure(oldValue), dataStructure(newValue))
                     : newValue)));
@@ -57,7 +55,7 @@ public class NextImmutable
         return Stream.of(dataStructure1) //
             .map(Map::entrySet) //
             .flatMap(Collection::stream) //
-            .filter(e -> !areEqual(e.getValue(), dataStructure0.get(e.getKey()))) //
+            .filter(e -> !Compare.areEqual(e.getValue(), dataStructure0.get(e.getKey()))) //
             .map(e -> {
                 final String key = e.getKey();
                 final Object newValue = e.getValue();

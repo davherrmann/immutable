@@ -1,4 +1,4 @@
-package de.davherrmann.efficiently.immutable;
+package de.davherrmann.immutable;
 
 import java.io.IOException;
 import java.util.Map;

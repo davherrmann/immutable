@@ -1,4 +1,4 @@
-package de.davherrmann.efficiently.immutable;
+package de.davherrmann.immutable;
 
 import static java.util.Arrays.copyOf;
 

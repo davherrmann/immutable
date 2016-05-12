@@ -1,4 +1,4 @@
-package de.davherrmann.efficiently.immutable;
+package de.davherrmann.immutable;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;

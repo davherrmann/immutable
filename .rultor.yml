@@ -5,7 +5,7 @@ assets:
 docker:
   image: mostalive/ubuntu-14.04-oracle-jdk8
 install: |
-  sudo apt-get install maven
+  sudo apt-get install -q -y maven
 release:
   script: |
     mvn versions:set "-DnewVersion=${tag}"

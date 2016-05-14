@@ -57,7 +57,7 @@ public class PathRecorder<I>
     {
         return (T) Proxy.newProxyInstance( //
             type.getClassLoader(), //
-            new Class[]{type}, //
+            new Class<?>[]{type}, //
             new PathInvocationHandler(nestedPath));
     }
 

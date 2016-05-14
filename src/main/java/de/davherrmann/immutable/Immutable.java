@@ -212,7 +212,7 @@ public class Immutable<I>
     {
         return (T) Proxy.newProxyInstance( //
             ImmutableNode.class.getClassLoader(), //
-            new Class[]{type, ImmutableNode.class}, //
+            new Class<?>[]{type, ImmutableNode.class}, //
             new ImmutableObjectInvocationHandler(nestedPath) //
         );
     }

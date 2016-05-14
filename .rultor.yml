@@ -1,4 +1,4 @@
-decrypt:
+assets:
   settings.xml: "davherrmann/rultor-config#assets/settings.xml"
   pubring.gpg: "davherrmann/rultor-config#assets/pubring.gpg"
   secring.gpg: "davherrmann/rultor-config#assets/secring.gpg"

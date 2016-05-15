@@ -5,8 +5,9 @@ assets:
 docker:
   image: mostalive/ubuntu-14.04-oracle-jdk8
 install: |
+  sudo apt-add-repository -y ppa:andrei-pozolotin/maven3
   sudo apt-get update
-  sudo apt-get install -q -y --fix-missing maven
+  sudo apt-get install -q -y maven3
   sudo apt-get install -q -y git
 release:
   script: |

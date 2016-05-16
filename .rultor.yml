@@ -6,6 +6,7 @@ docker:
   image: davherrmann/java8maven
 release:
   script: |
-    mvn versions:set "-DnewVersion=${tag}"
+    mvn versions:set "-DnewVersion=${tag#?}"
     git commit -am "${tag}"
+    git push --all origin
     mvn clean deploy --activate-profiles sonatype --settings /home/r/settings.xml

@@ -5,7 +5,7 @@
 
 	<groupId>de.davherrmann.immutable</groupId>
 	<artifactId>immutable</artifactId>
-	<version>0.1.2-SNAPSHOT</version>
+	<version>v0.1.2</version>
 
 	<parent>
 		<groupId>com.jcabi</groupId>

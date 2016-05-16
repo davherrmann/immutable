@@ -3,14 +3,7 @@ assets:
   pubring.gpg: "davherrmann/rultor-config#assets/pubring.gpg"
   secring.gpg: "davherrmann/rultor-config#assets/secring.gpg"
 docker:
-  image: mostalive/ubuntu-14.04-oracle-jdk8
-install: |
-  sudo apt-get update
-  sudo apt-get install -q -y software-properties-common
-  sudo apt-add-repository -y ppa:andrei-pozolotin/maven3
-  sudo apt-get update
-  sudo apt-get install -q -y maven3
-  sudo apt-get install -q -y git
+  image: davherrmann/java8maven
 release:
   script: |
     mvn versions:set "-DnewVersion=${tag}"

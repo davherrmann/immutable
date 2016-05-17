@@ -7,6 +7,11 @@
 	<artifactId>immutable</artifactId>
 	<version>SNAPSHOT</version>
 
+	<properties>
+		<maven.build.timestamp.format>yyyy-MM-dd HH:mm:ssa</maven.build.timestamp.format>
+		<timestamp>${maven.build.timestamp}</timestamp>
+	</properties>
+
 	<parent>
 		<groupId>com.jcabi</groupId>
 		<artifactId>parent</artifactId>
@@ -40,6 +45,13 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<configuration>
+					<timestampFormat>{0,date,yyyy-MM-dd HH:mm:ssa}</timestampFormat>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

@@ -28,6 +28,7 @@ public class ImmutableTypeAdapterFactory implements TypeAdapterFactory
                 @Override
                 public T read(JsonReader in) throws IOException
                 {
+                    // TODO implement gson read
                     return null;
                 }
             };

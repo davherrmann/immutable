@@ -24,6 +24,7 @@ public class ImmutableListTypeAdapter extends TypeAdapter<ImmutableList<?>>
     @Override
     public ImmutableList<?> read(JsonReader in) throws IOException
     {
+        // TODO implement gson read
         return null;
     }
 }

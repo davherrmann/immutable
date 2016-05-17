@@ -12,4 +12,4 @@ addons:
 after_success:
   - mvn clean test jacoco:report coveralls:report
   - echo "<settings><servers><server><id>oss.sonatype.org</id><username>\${env.OSSRH_USER}</username><password>\${env.OSSRH_PASS}</password></server></servers></settings>" > ~/settings.xml
-  - mvn deploy --settings ~/settings.xml
+  - mvn deploy -DskipTests --settings ~/settings.xml

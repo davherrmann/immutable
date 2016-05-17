@@ -16,14 +16,7 @@ public class PathRecorder<I>
 {
     private final I path;
 
-    private ThreadLocal<List<String>> lastPath = new ThreadLocal<List<String>>()
-    {
-        @Override
-        protected List<String> initialValue()
-        {
-            return ImmutableList.of();
-        }
-    };
+    private ThreadLocal<List<String>> lastPath = new ThreadLocal<>();
 
     public PathRecorder(Class<I> type)
     {

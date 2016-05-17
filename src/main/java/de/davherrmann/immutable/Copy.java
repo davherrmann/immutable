@@ -2,7 +2,7 @@ package de.davherrmann.immutable;
 
 import static java.util.Arrays.copyOf;
 
-public class Copy
+public final class Copy
 {
     private Copy()
     {

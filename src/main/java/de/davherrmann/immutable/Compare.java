@@ -2,7 +2,7 @@ package de.davherrmann.immutable;
 
 import java.util.Arrays;
 
-public class Compare
+public final class Compare
 {
     private Compare()
     {

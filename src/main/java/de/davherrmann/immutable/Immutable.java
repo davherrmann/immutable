@@ -202,7 +202,7 @@ public class Immutable<I>
         return Objects.hash(type, values);
     }
 
-    Map<String, Object> values()
+    protected Map<String, Object> values()
     {
         return values;
     }

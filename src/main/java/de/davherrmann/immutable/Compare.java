@@ -12,7 +12,7 @@ public final class Compare
     {
         if (arg1 == null || arg2 == null)
         {
-            return arg1 == arg2;
+            return arg1 == null && arg2 == null;
         }
         else if (arg1 instanceof Object[] && arg2 instanceof Object[])
         {

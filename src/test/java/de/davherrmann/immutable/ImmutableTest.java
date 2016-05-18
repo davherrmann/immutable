@@ -6,11 +6,13 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -24,6 +26,7 @@ public class ImmutableTest
     private final POJO path = immutable.path();
     private final POJO pojo = immutable.asObject();
 
+    @Ignore("some room for ideas")
     @Test
     public void immutableWorks() throws Exception
     {
@@ -161,6 +164,8 @@ public class ImmutableTest
 
         // when
         new Immutable<>(POJO.class).in(path::wantToClose).set(true);
+
+        fail();
     }
 
     @Test

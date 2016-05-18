@@ -3,6 +3,7 @@ package de.davherrmann.immutable;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -46,6 +47,8 @@ public class PathRecorderTest
 
         // when
         pathRecorder.pathFor(() -> "");
+
+        fail();
     }
 
     private interface POJO

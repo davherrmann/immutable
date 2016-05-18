@@ -10,7 +10,6 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -28,7 +27,7 @@ public class ImmutableTest
 
     @Ignore("some room for ideas")
     @Test
-    public void immutableWorks() throws Exception
+    public void someRoomForIdeas() throws Exception
     {
         immutable //
             .in(path::title).set("Test") //
@@ -49,9 +48,6 @@ public class ImmutableTest
         // immutable.update(path::currentPage, page -> page + 1);
         // immutable.setList(path::list, list);
         // immutable.updateList(path::list, list -> list.add(""));
-
-        // then
-        final POJO changedPOJO = immutable.asObject();
     }
 
     @Test
@@ -172,10 +168,12 @@ public class ImmutableTest
     public void clear_returnsEmptyState() throws Exception
     {
         // when
-        final Immutable<POJO> clearedImmutable = immutable.clear();
+        final Immutable<POJO> clearedImmutable = immutable  //
+            .in(path::wantToClose).set(true) //
+            .clear();
 
         // then
-        assertThat(immutable.values().isEmpty(), is(true));
+        assertThat(clearedImmutable.values().isEmpty(), is(true));
     }
 
     @Test
@@ -383,6 +381,7 @@ public class ImmutableTest
 
         int currentPage();
 
+        // TODO add map support
         Map<String, String> myMap();
 
         POJO pojo();
@@ -395,8 +394,5 @@ public class ImmutableTest
 
             String lastname();
         }
-    }
-    private interface ListSupplier extends Supplier<List<String>>
-    {
     }
 }

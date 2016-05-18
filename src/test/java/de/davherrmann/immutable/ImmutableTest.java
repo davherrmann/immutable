@@ -48,6 +48,8 @@ public class ImmutableTest
         // immutable.update(path::currentPage, page -> page + 1);
         // immutable.setList(path::list, list);
         // immutable.updateList(path::list, list -> list.add(""));
+
+        fail("please add @ignore and write another test - this is just some room for ideas!");
     }
 
     @Test

@@ -79,6 +79,11 @@ public class Immutable<I>
         return (T) nextImmutable.getInPath(values, pathRecorder.pathFor(method));
     }
 
+    public Immutable<I> merge(Immutable<I> immutable)
+    {
+        return new Immutable<>(type, nextImmutable.merge(values, immutable.values()), pathRecorder);
+    }
+
     public Immutable<I> diff(Immutable<I> immutable)
     {
         return new Immutable<>(type, nextImmutable.diff(values, immutable.values()), pathRecorder);

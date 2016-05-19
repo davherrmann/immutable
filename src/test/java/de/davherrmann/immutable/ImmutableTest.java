@@ -4,6 +4,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -362,6 +363,21 @@ public class ImmutableTest
 
         // when / then
         assertThat(newImmutable.get(path -> path::titles), is(newArrayList("Foo")));
+    }
+
+    @Test
+    public void merge_combinesTwoImmutables() throws Exception
+    {
+        // given
+        final Immutable<POJO> immutable0 = immutable.in(path::wantToClose).set(true);
+        final Immutable<POJO> immutable1 = immutable.in(path.pojo()::title).set("Foo");
+
+        // when
+        final Immutable<POJO> mergedImmutable = immutable0.merge(immutable1);
+
+        // then
+        final Immutable<POJO> manuallyMergedImmutable = immutable0.in(path.pojo()::title).set("Foo");
+        assertEquals(manuallyMergedImmutable, mergedImmutable);
     }
 
     private Immutable<POJO.Name> name(String firstname, String lastname)

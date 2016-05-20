@@ -207,24 +207,6 @@ public class ImmutableTest
         assertThat(newImmutable.asObject().name().lastname(), is("B"));
     }
 
-    // TODO still relevant?
-    /*@Test
-    public void setIn_setsInCorrectPath_whenPathIsUsedInAnotherThread() throws Exception
-    {
-        // given
-        path.name().firstname();
-        final Thread thread = new Thread(() -> path.name().lastname());
-        thread.start();
-        thread.join();
-
-        // when
-        final Immutable<POJO> newImmutable = immutable.in("NOT USING PATH").set("A");
-
-        // then
-        assertThat(newImmutable.asObject().name().firstname(), is("A"));
-        assertThat(newImmutable.asObject().name().lastname(), is(nullValue()));
-    }*/
-
     @Test
     public void get_returnsCorrectList_whenImmutableListWasSet() throws Exception
     {

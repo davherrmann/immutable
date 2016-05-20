@@ -29,8 +29,6 @@ public class ImmutableTypeAdapter<T> extends TypeAdapter<Immutable<T>>
     @Override
     public Immutable<T> read(JsonReader in) throws IOException
     {
-        // TODO implement gson read
-        // return new Immutable<>()
         final ImmutableJSONWrapper jsonWrapper = gson.fromJson(in, ImmutableJSONWrapper.class);
         return new Immutable<>(classFor(jsonWrapper.fullQualifiedType()), jsonWrapper.data());
     }

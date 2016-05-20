@@ -24,7 +24,8 @@ public class ImmutableTypeAdapterFactoryTest
     public void write_withEmptyImmutable_writesEmptyObject() throws Exception
     {
         // when / then
-        assertThat(gson.toJson(immutable), is("{}"));
+        assertThat(gson.toJson(immutable),
+            is("{\"type\":\"de.davherrmann.immutable.ImmutableTypeAdapterFactoryTest$POJO\",\"data\":{}}"));
     }
 
     @Test
@@ -35,7 +36,8 @@ public class ImmutableTypeAdapterFactoryTest
             .in(path.name()::firstname).set("Foo");
 
         // then
-        assertThat(gson.toJson(newImmutable), is("{\"name\":{\"firstname\":\"Foo\"}}"));
+        assertThat(gson.toJson(newImmutable),
+            is("{\"type\":\"de.davherrmann.immutable.ImmutableTypeAdapterFactoryTest$POJO\",\"data\":{\"name\":{\"firstname\":\"Foo\"}}}"));
     }
 
     @Test
@@ -46,7 +48,8 @@ public class ImmutableTypeAdapterFactoryTest
             .in(path::name).set(name("Foo", "Bar"));
 
         // then
-        assertThat(gson.toJson(newImmutable), is("{\"name\":{\"firstname\":\"Foo\",\"lastname\":\"Bar\"}}"));
+        assertThat(gson.toJson(newImmutable),
+            is("{\"type\":\"de.davherrmann.immutable.ImmutableTypeAdapterFactoryTest$POJO\",\"data\":{\"name\":{\"firstname\":\"Foo\",\"lastname\":\"Bar\"}}}"));
     }
 
     @Test
@@ -58,7 +61,8 @@ public class ImmutableTypeAdapterFactoryTest
             .in(path.name()::lastname).set("B");
 
         // then
-        assertThat(gson.toJson(newImmutable), is("{\"name\":{\"firstname\":\"Foo\",\"lastname\":\"B\"}}"));
+        assertThat(gson.toJson(newImmutable),
+            is("{\"type\":\"de.davherrmann.immutable.ImmutableTypeAdapterFactoryTest$POJO\",\"data\":{\"name\":{\"firstname\":\"Foo\",\"lastname\":\"B\"}}}"));
     }
 
     @Test
@@ -72,7 +76,7 @@ public class ImmutableTypeAdapterFactoryTest
 
         // then
         assertThat(gson.toJson(newImmutable),
-            is("{\"names\":[{\"firstname\":\"A\",\"lastname\":\"AFoo\"},{\"firstname\":\"B\",\"lastname\":\"BFoo\"}]}"));
+            is("{\"type\":\"de.davherrmann.immutable.ImmutableTypeAdapterFactoryTest$POJO\",\"data\":{\"names\":[{\"firstname\":\"A\",\"lastname\":\"AFoo\"},{\"firstname\":\"B\",\"lastname\":\"BFoo\"}]}}"));
     }
 
     private Immutable<POJO.Name> name(String firstname, String lastname)

@@ -2,6 +2,7 @@ package de.davherrmann.immutable;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
@@ -378,6 +379,13 @@ public class ImmutableTest
         // then
         final Immutable<POJO> manuallyMergedImmutable = immutable0.in(path.pojo()::title).set("Foo");
         assertEquals(manuallyMergedImmutable, mergedImmutable);
+    }
+
+    @Test
+    public void type_returnsCorrectType() throws Exception
+    {
+        // when / then
+        assertThat(immutable.type(), equalTo(POJO.class));
     }
 
     private Immutable<POJO.Name> name(String firstname, String lastname)

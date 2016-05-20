@@ -18,14 +18,19 @@ import com.google.common.collect.ImmutableMap;
 @com.google.gson.annotations.JsonAdapter(ImmutableTypeAdapter.class)
 public class Immutable<I>
 {
+    private final transient NextImmutable nextImmutable = new NextImmutable();
+    private final transient PathRecorder<I> pathRecorder;
     private final Class<I> type;
-    private final NextImmutable nextImmutable = new NextImmutable();
-    private final PathRecorder<I> pathRecorder;
     private final Map<String, Object> values;
 
     public Immutable(Class<I> type)
     {
-        this(type, newHashMap(), new PathRecorder<>(type));
+        this(type, newHashMap());
+    }
+
+    protected Immutable(final Class<I> type, final Map<String, Object> values)
+    {
+        this(type, values, new PathRecorder<>(type));
     }
 
     private Immutable(Class<I> type, Map<String, Object> initialValues, PathRecorder<I> pathRecorder)
@@ -92,6 +97,12 @@ public class Immutable<I>
     public Immutable<I> clear()
     {
         return new Immutable<>(type, ImmutableMap.of(), pathRecorder);
+    }
+
+    // TODO instead of type() and values() use a wrapper type?
+    public Class<I> type()
+    {
+        return type;
     }
 
     public class In<T>

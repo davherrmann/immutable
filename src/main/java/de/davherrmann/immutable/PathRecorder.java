@@ -64,6 +64,7 @@ public class PathRecorder<I>
             new PathInvocationHandler(nestedPath));
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> T pathInstanceFor(Class<T> type)
     {
         pathRecorders.get().putIfAbsent(type, new PathRecorder<>(type));

@@ -109,6 +109,7 @@ public class PathRecorderTest
     {
         // given
         final PathRecorder<POJO> pathRecorder0 = pathRecorderInstanceFor(POJO.class);
+        @SuppressWarnings("rawtypes")
         final PathRecorder[] pathRecorder1 = new PathRecorder[1];
 
         final Thread thread = new Thread(() -> pathRecorder1[0] = pathRecorderInstanceFor(POJO.class));

@@ -385,6 +385,8 @@ public class ImmutableTest
         assertThat(immutable.type(), equalTo(POJO.class));
     }
 
+    // TODO write test for this commit! Immutable accessed from another thread, wrong PathRecorder!
+
     private Immutable<POJO.Name> name(String firstname, String lastname)
     {
         return new Immutable<>(POJO.Name.class) //

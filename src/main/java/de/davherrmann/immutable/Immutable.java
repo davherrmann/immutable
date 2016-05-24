@@ -20,7 +20,6 @@ import com.google.common.collect.ImmutableMap;
 public class Immutable<I>
 {
     private final transient NextImmutable nextImmutable = new NextImmutable();
-    private final transient PathRecorder<I> pathRecorder;
     private final Class<I> type;
     private final Map<String, Object> values;
 
@@ -29,21 +28,15 @@ public class Immutable<I>
         this(type, newHashMap());
     }
 
-    protected Immutable(final Class<I> type, final Map<String, Object> values)
-    {
-        this(type, values, pathRecorderInstanceFor(type));
-    }
-
-    private Immutable(Class<I> type, Map<String, Object> initialValues, PathRecorder<I> pathRecorder)
+    protected Immutable(Class<I> type, Map<String, Object> initialValues)
     {
         this.values = initialValues;
         this.type = type;
-        this.pathRecorder = pathRecorder;
     }
 
     public I path()
     {
-        return pathRecorder.path();
+        return pathRecorderInstanceFor(type).path();
     }
 
     public I asObject()
@@ -60,7 +53,7 @@ public class Immutable<I>
     {
         // TODO can we rely on method as defaultValue?
         final T defaultValue = method.get();
-        return new In<>(pathRecorder.pathFor(method), defaultValue);
+        return new In<>(pathRecorderInstanceFor(type).pathFor(method), defaultValue);
     }
 
     public <T> InList<T> inList(Function<I, Supplier<List<T>>> pathToMethod)
@@ -71,7 +64,7 @@ public class Immutable<I>
     public <T> InList<T> inList(Supplier<List<T>> method)
     {
         final List<T> defaultValue = method.get();
-        return new InList<>(pathRecorder.pathFor(method), defaultValue);
+        return new InList<>(pathRecorderInstanceFor(type).pathFor(method), defaultValue);
     }
 
     public <T> T get(Function<I, Supplier<T>> method)
@@ -82,22 +75,22 @@ public class Immutable<I>
     @SuppressWarnings("unchecked")
     public <T> T get(Supplier<T> method)
     {
-        return (T) nextImmutable.getInPath(values, pathRecorder.pathFor(method));
+        return (T) nextImmutable.getInPath(values, pathRecorderInstanceFor(type).pathFor(method));
     }
 
     public Immutable<I> merge(Immutable<I> immutable)
     {
-        return new Immutable<>(type, nextImmutable.merge(values, immutable.values()), pathRecorder);
+        return new Immutable<>(type, nextImmutable.merge(values, immutable.values()));
     }
 
     public Immutable<I> diff(Immutable<I> immutable)
     {
-        return new Immutable<>(type, nextImmutable.diff(values, immutable.values()), pathRecorder);
+        return new Immutable<>(type, nextImmutable.diff(values, immutable.values()));
     }
 
     public Immutable<I> clear()
     {
-        return new Immutable<>(type, ImmutableMap.of(), pathRecorder);
+        return new Immutable<>(type, ImmutableMap.of());
     }
 
     // TODO instead of type() and values() use a wrapper type?
@@ -119,7 +112,7 @@ public class Immutable<I>
 
         public Immutable<I> set(T value)
         {
-            return new Immutable<>(type, nextImmutable.setIn(values, path, immutableNodeOr(value)), pathRecorder);
+            return new Immutable<>(type, nextImmutable.setIn(values, path, immutableNodeOr(value)));
         }
 
         public Immutable<I> set(Immutable<T> immutableValue)
@@ -137,8 +130,7 @@ public class Immutable<I>
                     path, //
                     value -> updater.apply((T) (value == null
                         ? defaultValue
-                        : value))),  //
-                pathRecorder);
+                        : value))));
         }
 
         private Object immutableNodeOr(T value)
@@ -162,7 +154,7 @@ public class Immutable<I>
 
         public Immutable<I> set(List<LT> value)
         {
-            return new Immutable<>(type, nextImmutable.setIn(values, path, value), pathRecorder);
+            return new Immutable<>(type, nextImmutable.setIn(values, path, value));
         }
 
         public Immutable<I> set(ImmutableList<LT> value)
@@ -182,8 +174,7 @@ public class Immutable<I>
                         ? new ImmutableList<>()
                         : new ImmutableList<LT>() //
                             .addAll((List<LT>) value)) //
-                        .asList()),  //
-                pathRecorder);
+                        .asList()));
         }
 
         // TODO check for redundant code!
@@ -197,8 +188,7 @@ public class Immutable<I>
                     path, //
                     value -> updater.apply(value == null
                         ? defaultValue
-                        : (List<LT>) value)), //
-                pathRecorder);
+                        : (List<LT>) value)));
         }
     }
 

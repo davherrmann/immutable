@@ -1,11 +1,13 @@
 package de.davherrmann.immutable;
 
 import static com.google.common.base.Defaults.defaultValue;
+import static com.google.common.collect.Maps.newHashMap;
 import static java.util.Collections.emptyList;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import javax.validation.constraints.NotNull;
@@ -14,11 +16,19 @@ import com.google.common.collect.ImmutableList;
 
 public class PathRecorder<I>
 {
+    private static ThreadLocal<Map<Class<?>, PathRecorder<?>>> pathRecorders = new ThreadLocal<Map<Class<?>, PathRecorder<?>>>()
+    {
+        @Override
+        protected Map<Class<?>, PathRecorder<?>> initialValue() {
+            return newHashMap();
+        }
+    };
+
     private final I path;
 
     private ThreadLocal<List<String>> lastPath = new ThreadLocal<>();
 
-    public PathRecorder(Class<I> type)
+    private PathRecorder(Class<I> type)
     {
         this.path = pathFor(type, emptyList());
     }
@@ -52,6 +62,20 @@ public class PathRecorder<I>
             type.getClassLoader(), //
             new Class<?>[]{type}, //
             new PathInvocationHandler(nestedPath));
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T pathInstanceFor(Class<T> type)
+    {
+        pathRecorders.get().putIfAbsent(type, new PathRecorder<>(type));
+        return (T) pathRecorders.get().get(type).path();
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> PathRecorder<T> pathRecorderInstanceFor(Class<T> type)
+    {
+        pathRecorders.get().putIfAbsent(type, new PathRecorder<>(type));
+        return (PathRecorder<T>) pathRecorders.get().get(type);
     }
 
     private class PathInvocationHandler extends AbstractPathInvocationHandler

@@ -156,16 +156,13 @@ public class ImmutableTest
     }
 
     @Test
-    public void changeWithOwnUnusedPath_usingWrongPath_throwsMeaningfulException() throws Exception
+    public void changeWithOwnUnusedPath_usingPathFromOtherImmutableInSameThread_changesImmutable() throws Exception
     {
-        // then
-        thrown.expect(IllegalStateException.class);
-        thrown.expectMessage("No path was recorded. Did you use the correct Immutable#path()?");
-
         // when
-        new Immutable<>(POJO.class).in(path::wantToClose).set(true);
+        final Immutable<POJO> newImmutable = new Immutable<>(POJO.class).in(path::wantToClose).set(true);
 
-        fail();
+        // then
+        assertThat(newImmutable.get(path::wantToClose), is(true));
     }
 
     @Test
@@ -369,6 +366,8 @@ public class ImmutableTest
         // when / then
         assertThat(immutable.type(), equalTo(POJO.class));
     }
+
+    // TODO write test for this commit! Immutable accessed from another thread, wrong PathRecorder!
 
     private Immutable<POJO.Name> name(String firstname, String lastname)
     {

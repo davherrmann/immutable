@@ -12,21 +12,20 @@ import java.util.function.Supplier;
 
 import javax.validation.constraints.NotNull;
 
-import com.google.common.collect.ImmutableList;
-
 public class PathRecorder<I>
 {
     private static ThreadLocal<Map<Class<?>, PathRecorder<?>>> pathRecorders = new ThreadLocal<Map<Class<?>, PathRecorder<?>>>()
     {
         @Override
-        protected Map<Class<?>, PathRecorder<?>> initialValue() {
+        protected Map<Class<?>, PathRecorder<?>> initialValue()
+        {
             return newHashMap();
         }
     };
 
     private final I path;
 
-    private ThreadLocal<List<String>> lastPath = new ThreadLocal<>();
+    private ThreadLocal<PathInfo> lastPathInfo = new ThreadLocal<>();
 
     private PathRecorder(Class<I> type)
     {
@@ -41,18 +40,27 @@ public class PathRecorder<I>
     @NotNull
     public List<String> pathFor(Supplier<?> method)
     {
-        this.lastPath.set(ImmutableList.of());
+        return pathInfoFor(method).lastPath();
+    }
+
+    public Method methodFor(Supplier<?> method)
+    {
+        return pathInfoFor(method).lastMethod();
+    }
+
+    private PathInfo pathInfoFor(Supplier<?> method)
+    {
+        this.lastPathInfo.set(null);
 
         method.get();
 
-        final List<String> path = this.lastPath.get();
+        final PathInfo pathInfo = this.lastPathInfo.get();
 
-        if (path.isEmpty())
+        if (pathInfo == null)
         {
             throw new IllegalStateException("No path was recorded. Did you use the correct Immutable#path()?");
         }
-
-        return path;
+        return pathInfo;
     }
 
     @SuppressWarnings("unchecked")
@@ -70,7 +78,6 @@ public class PathRecorder<I>
         pathRecorders.get().putIfAbsent(type, new PathRecorder<>(type));
         return (T) pathRecorders.get().get(type).path();
     }
-
     @SuppressWarnings("unchecked")
     public static <T> PathRecorder<T> pathRecorderInstanceFor(Class<T> type)
     {
@@ -88,15 +95,35 @@ public class PathRecorder<I>
         @Override
         protected Object handleInvocation(List<String> path, Method method) throws Throwable
         {
-            lastPath.set(pathWith(method));
+            final List<String> lastPath = pathWith(method);
+            lastPathInfo.set(new PathInfo()
+            {
+                @Override
+                public Method lastMethod()
+                {
+                    return method;
+                }
+                @Override
+                public List<String> lastPath()
+                {
+                    return lastPath;
+                }
+            });
 
             final Class<?> returnType = method.getReturnType();
             final Object defaultValue = defaultValue(returnType);
 
             return defaultValue != null || !returnType.isInterface()
                 ? defaultValue
-                : pathFor(returnType, lastPath.get());
+                : pathFor(returnType, lastPathInfo.get().lastPath());
         }
+    }
+
+    private interface PathInfo
+    {
+        Method lastMethod();
+
+        List<String> lastPath();
     }
 
 }

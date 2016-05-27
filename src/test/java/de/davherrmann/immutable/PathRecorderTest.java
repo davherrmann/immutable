@@ -8,7 +8,8 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-import org.hamcrest.CoreMatchers;
+import java.lang.reflect.Method;
+
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -118,6 +119,16 @@ public class PathRecorderTest
 
         // then
         assertThat(pathRecorder0, is(not(pathRecorder1)));
+    }
+
+    @Test
+    public void methodFor_returnsMethod_forPassedSupplier() throws Exception
+    {
+        // given
+        final Method method = POJO.class.getMethod("integer");
+
+        // when / then
+        assertThat(pathRecorder.methodFor(path.pojo()::integer), is(method));
     }
 
     private interface POJO

@@ -131,6 +131,19 @@ public class PathRecorderTest
         assertThat(pathRecorder.methodFor(path.pojo()::integer), is(method));
     }
 
+    @Test
+    public void pathFor_returnsPath_whenPathWasCreatedWithPathRecorderFromDifferentThread() throws Exception
+    {
+        // given
+        final POJO[] path = new POJO[1];
+        final Thread thread = new Thread(() -> path[0] = pathRecorderInstanceFor(POJO.class).path());
+        thread.start();
+        thread.join();
+
+        // when /then
+        assertThat(pathRecorder.pathFor(path[0].pojo()::integer), is(newArrayList("pojo", "integer")));
+    }
+
     private interface POJO
     {
         POJO pojo();

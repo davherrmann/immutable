@@ -25,7 +25,7 @@ public class PathRecorder<I>
 
     private final I path;
 
-    private ThreadLocal<PathInfo> lastPathInfo = new ThreadLocal<>();
+    private static ThreadLocal<PathInfo> lastPathInfo = new ThreadLocal<>();
 
     private PathRecorder(Class<I> type)
     {
@@ -50,11 +50,11 @@ public class PathRecorder<I>
 
     private PathInfo pathInfoFor(Supplier<?> method)
     {
-        this.lastPathInfo.set(null);
+        lastPathInfo.set(null);
 
         method.get();
 
-        final PathInfo pathInfo = this.lastPathInfo.get();
+        final PathInfo pathInfo = lastPathInfo.get();
 
         if (pathInfo == null)
         {
@@ -64,7 +64,7 @@ public class PathRecorder<I>
     }
 
     @SuppressWarnings("unchecked")
-    private <T> T pathFor(Class<T> type, List<String> nestedPath)
+    private static <T> T pathFor(Class<T> type, List<String> nestedPath)
     {
         return (T) Proxy.newProxyInstance( //
             type.getClassLoader(), //
@@ -85,7 +85,7 @@ public class PathRecorder<I>
         return (PathRecorder<T>) pathRecorders.get().get(type);
     }
 
-    private class PathInvocationHandler extends AbstractPathInvocationHandler
+    private static class PathInvocationHandler extends AbstractPathInvocationHandler
     {
         public PathInvocationHandler(final List<String> nestedPath)
         {

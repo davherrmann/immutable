@@ -56,6 +56,7 @@ public class Immutable<I>
         return new In<>(pathRecorderInstanceFor(type).pathFor(method), defaultValue);
     }
 
+    // TODO: these methods should be mixins -> you can define your own Immutable feature set!
     public <T> InList<T> inList(Function<I, Supplier<List<T>>> pathToMethod)
     {
         return inList(pathToMethod.apply(path()));

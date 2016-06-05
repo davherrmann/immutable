@@ -1,7 +1,7 @@
 package de.davherrmann.immutable;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Maps.newHashMap;
+import static de.davherrmann.immutable.NextImmutable.IMMUTABLE_NODE;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
@@ -284,7 +284,7 @@ public class ImmutableTest
         final Immutable<POJO> diff = immutable1.diff(immutable2);
 
         // then
-        assertThat(diff.values(), is(newHashMap()));
+        assertThat(diff.values(), is(IMMUTABLE_NODE));
     }
 
     @Test
@@ -298,7 +298,7 @@ public class ImmutableTest
         final Immutable<POJO> diff = immutable1.diff(immutable2);
 
         // then
-        assertThat(diff.values(), is(newHashMap()));
+        assertThat(diff.values(), is(IMMUTABLE_NODE));
     }
 
     @Test

@@ -2,6 +2,7 @@ package de.davherrmann.immutable;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
+import static de.davherrmann.immutable.NextImmutable.IMMUTABLE_NODE_ENTRY;
 import static java.util.Optional.empty;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.core.Is.is;
@@ -18,9 +19,11 @@ public class NextImmutableTest
 {
     private final NextImmutable nextImmutable = new NextImmutable();
     private final ImmutableMap<String, Object> immutableDataStructure = ImmutableMap.<String, Object>builder() //
+        .put(IMMUTABLE_NODE_ENTRY) //
         .put("A", "AFoo") //
         .put("B", "BFoo") //
         .put("C", ImmutableMap.<String, Object>builder() //
+            .put(IMMUTABLE_NODE_ENTRY) //
             .put("D", "DFoo") //
             .put("E", "EFoo") //
             .build()) //
@@ -161,7 +164,11 @@ public class NextImmutableTest
         final Map<String, Object> diff = nextImmutable.diff(immutableDataStructure, immutableDataStructure2);
 
         // then
-        assertThat(diff, is(ImmutableMap.builder().put("A", "ABar").put("B", "BBar").build()));
+        assertThat(diff, is(ImmutableMap.builder() //
+            .put(IMMUTABLE_NODE_ENTRY) //
+            .put("A", "ABar") //
+            .put("B", "BBar") //
+            .build()));
     }
 
     @Test
@@ -177,7 +184,9 @@ public class NextImmutableTest
         // then
         assertThat(diff, //
             is(ImmutableMap.builder() //
+                .put(IMMUTABLE_NODE_ENTRY) //
                 .put("C", ImmutableMap.builder() //
+                    .put(IMMUTABLE_NODE_ENTRY) //
                     .put("D", "DBar") //
                     .build()) //
                 .build()));
@@ -196,7 +205,9 @@ public class NextImmutableTest
         // then
         assertThat(diff, //
             is(ImmutableMap.builder() //
+                .put(IMMUTABLE_NODE_ENTRY) //
                 .put("S", ImmutableMap.builder() //
+                    .put(IMMUTABLE_NODE_ENTRY) //
                     .put("T", "TBar") //
                     .build()) //
                 .build()));
@@ -215,6 +226,7 @@ public class NextImmutableTest
         // then
         assertThat(diff, //
             is(ImmutableMap.builder() //
+                .put(IMMUTABLE_NODE_ENTRY) //
                 .put("S", empty()) //
                 .build()));
     }
@@ -233,6 +245,7 @@ public class NextImmutableTest
             .put("A", "AFoo") //
             .put("B", "BFoo") //
             .put("C", ImmutableMap.<String, Object>builder() //
+                .put("immutableNode", true) //
                 .put("D", "DFoo") //
                 .put("E", "EFoo") //
                 .build()) //
@@ -245,6 +258,7 @@ public class NextImmutableTest
     private Map<String, Object> change(String key, Object value)
     {
         return ImmutableMap.<String, Object>builder() //
+            .put(IMMUTABLE_NODE_ENTRY) //
             .put(key, value) //
             .build();
     }

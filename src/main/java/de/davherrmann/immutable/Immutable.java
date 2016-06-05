@@ -1,6 +1,6 @@
 package de.davherrmann.immutable;
 
-import static com.google.common.collect.Maps.newHashMap;
+import static de.davherrmann.immutable.NextImmutable.IMMUTABLE_NODE;
 import static de.davherrmann.immutable.PathRecorder.pathRecorderInstanceFor;
 import static java.util.Collections.emptyList;
 import static org.apache.commons.lang3.ClassUtils.isAssignable;
@@ -25,7 +25,7 @@ public class Immutable<I>
 
     public Immutable(Class<I> type)
     {
-        this(type, newHashMap());
+        this(type, IMMUTABLE_NODE);
     }
 
     protected Immutable(Class<I> type, Map<String, Object> initialValues)

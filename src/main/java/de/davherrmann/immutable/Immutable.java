@@ -1,5 +1,7 @@
 package de.davherrmann.immutable;
 
+import static com.google.common.base.Joiner.on;
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
 import static de.davherrmann.immutable.PathRecorder.pathRecorderInstanceFor;
 import static java.util.Collections.emptyList;
@@ -98,6 +100,28 @@ public class Immutable<I>
     public Class<I> type()
     {
         return type;
+    }
+
+    // TODO put into NextImmutable?
+    public void visitNodes(final NodeVisitor nodeVisitor)
+    {
+        visitNodes(values, newArrayList(), nodeVisitor);
+    }
+
+    private void visitNodes(final Map<?, ?> values, final List<String> path, final NodeVisitor nodeVisitor)
+    {
+        values.entrySet().stream() //
+            .forEach(e -> {
+                final List<String> nestedPath = newArrayList(path);
+                nestedPath.add(e.getKey().toString());
+
+                nodeVisitor.visit(on(".").join(nestedPath), e.getValue());
+
+                if (e.getValue() instanceof Map)
+                {
+                    visitNodes((Map<?, ?>) e.getValue(), nestedPath, nodeVisitor);
+                }
+            });
     }
 
     public class In<T>

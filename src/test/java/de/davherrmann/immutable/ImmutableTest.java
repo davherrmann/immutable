@@ -18,6 +18,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import com.google.common.collect.ImmutableMap;
+
 public class ImmutableTest
 {
     @Rule
@@ -365,6 +367,42 @@ public class ImmutableTest
     {
         // when / then
         assertThat(immutable.type(), equalTo(POJO.class));
+    }
+
+    @Test
+    public void visit_visitsAllNodes() throws Exception
+    {
+        // given
+        final Immutable<POJO> newImmutable = immutable //
+            .in(path::wantToClose).set(true) //
+            .in(path.pojo()::title).set("Test") //
+            .in(path.pojo()::myMap).set(ImmutableMap.<String, String>builder() //
+                .put("A", "AFoo") //
+                .put("B", "BFoo") //
+                .build());
+        final Map<String, Object> visited = newHashMap();
+
+        // when
+        newImmutable.visitNodes(visited::put);
+
+        // then
+        assertThat(visited, equalTo(ImmutableMap.builder() //
+            .put("wantToClose", true) //
+            .put("pojo", ImmutableMap.builder() //
+                .put("title", "Test") //
+                .put("myMap", ImmutableMap.builder() //
+                    .put("A", "AFoo") //
+                    .put("B", "BFoo") //
+                    .build()) //
+                .build()) //
+            .put("pojo.title", "Test") //
+            .put("pojo.myMap", ImmutableMap.builder() //
+                .put("A", "AFoo") //
+                .put("B", "BFoo") //
+                .build()) //
+            .put("pojo.myMap.A", "AFoo") //
+            .put("pojo.myMap.B", "BFoo") //
+            .build()));
     }
 
     // TODO write test for this commit! Immutable accessed from another thread, wrong PathRecorder!

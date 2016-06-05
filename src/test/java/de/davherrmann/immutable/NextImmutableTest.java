@@ -3,6 +3,7 @@ package de.davherrmann.immutable;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
 import static java.util.Optional.empty;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
@@ -216,6 +217,28 @@ public class NextImmutableTest
             is(ImmutableMap.builder() //
                 .put("S", empty()) //
                 .build()));
+    }
+
+    @Test
+    public void visit_visitsAllNodes() throws Exception
+    {
+        // given
+        final Map<String, Object> visited = newHashMap();
+
+        // when
+        nextImmutable.visitNodes(immutableDataStructure, visited::put);
+
+        // then
+        assertThat(visited, equalTo(ImmutableMap.<String, Object>builder() //
+            .put("A", "AFoo") //
+            .put("B", "BFoo") //
+            .put("C", ImmutableMap.<String, Object>builder() //
+                .put("D", "DFoo") //
+                .put("E", "EFoo") //
+                .build()) //
+            .put("C.D", "DFoo") //
+            .put("C.E", "EFoo") //
+            .put("F", newHashMap()).build()));
     }
 
     // TODO do we need this method in NextImmutable?

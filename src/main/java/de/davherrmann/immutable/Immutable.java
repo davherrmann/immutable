@@ -94,6 +94,11 @@ public class Immutable<I>
         return new Immutable<>(type, ImmutableMap.of());
     }
 
+    public void visitNodes(final NodeVisitor visitor)
+    {
+        nextImmutable.visitNodes(values, visitor);
+    }
+
     // TODO instead of type() and values() use a wrapper type?
     public Class<I> type()
     {

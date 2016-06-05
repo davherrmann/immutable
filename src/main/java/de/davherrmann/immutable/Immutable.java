@@ -14,7 +14,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.google.common.base.Defaults;
-import com.google.common.collect.ImmutableMap;
 
 @com.google.gson.annotations.JsonAdapter(ImmutableTypeAdapter.class)
 public class Immutable<I>
@@ -91,7 +90,7 @@ public class Immutable<I>
 
     public Immutable<I> clear()
     {
-        return new Immutable<>(type, ImmutableMap.of());
+        return new Immutable<>(type, IMMUTABLE_NODE);
     }
 
     public void visitNodes(final NodeVisitor visitor)

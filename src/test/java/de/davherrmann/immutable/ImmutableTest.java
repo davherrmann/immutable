@@ -174,7 +174,7 @@ public class ImmutableTest
             .clear();
 
         // then
-        assertThat(clearedImmutable.values().isEmpty(), is(true));
+        assertThat(clearedImmutable.values(), is(IMMUTABLE_NODE));
     }
 
     @Test

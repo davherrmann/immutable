@@ -124,6 +124,7 @@ public class NextImmutable
         }
 
         return ImmutableMap.<String, Object>builder() //
+            .put(IMMUTABLE_NODE_ENTRY) //
             .put(path.get(0), changeForSinglePath(path.subList(1, path.size()), value)) //
             .build();
     }

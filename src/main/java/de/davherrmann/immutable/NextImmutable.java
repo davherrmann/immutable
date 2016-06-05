@@ -1,8 +1,9 @@
 package de.davherrmann.immutable;
 
+import static de.davherrmann.immutable.Compare.areEqual;
+import static java.util.Optional.empty;
 import static java.util.stream.Collectors.toMap;
 
-import java.util.AbstractMap.SimpleEntry;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -52,19 +53,23 @@ public class NextImmutable
 
     public Map<String, Object> diff(Map<String, Object> dataStructure0, Map<String, Object> dataStructure1)
     {
-        return Stream.of(dataStructure1) //
+        return Stream.of(dataStructure0, dataStructure1) //
             .map(Map::entrySet) //
             .flatMap(Collection::stream) //
-            .filter(e -> !Compare.areEqual(e.getValue(), dataStructure0.get(e.getKey()))) //
-            .map(e -> {
-                final String key = e.getKey();
-                final Object newValue = e.getValue();
-                final Object oldValue = dataStructure0.get(key);
-                return isDataStructure(newValue) && isDataStructure(oldValue)
-                    ? new SimpleEntry<>(key, diff(dataStructure(oldValue), dataStructure(newValue)))
-                    : e;
-            }) //
-            .collect(toMap(Entry::getKey, Entry::getValue));
+            .filter(e -> !areEqual(dataStructure0.get(e.getKey()), dataStructure1.get(e.getKey()))) //
+            .collect(toMap( //
+                Entry::getKey, //
+                e -> {
+                    final String key = e.getKey();
+                    final Object oldValue = dataStructure0.get(key);
+                    final Object newValue = dataStructure1.get(key);
+                    return newValue == null
+                        ? empty()
+                        : isDataStructure(oldValue) && isDataStructure(newValue)
+                            ? diff(dataStructure(oldValue), dataStructure(newValue))
+                            : newValue;
+                }, //
+                (oldValue, newValue) -> newValue));
     }
 
     private Map<String, Object> changeForSinglePath(final List<String> path, final Object value)

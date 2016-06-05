@@ -2,6 +2,7 @@ package de.davherrmann.immutable;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
+import static java.util.Optional.empty;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
@@ -197,6 +198,23 @@ public class NextImmutableTest
                 .put("S", ImmutableMap.builder() //
                     .put("T", "TBar") //
                     .build()) //
+                .build()));
+    }
+
+    @Test
+    public void diff_worksWithSecondDataStructureHavingLessElements() throws Exception
+    {
+        // given
+        final Map<String, Object> newImmutableDataStructure = nextImmutable.setIn(immutableDataStructure,
+            newArrayList("S", "T"), "TBar");
+
+        // when
+        final Map<String, Object> diff = nextImmutable.diff(newImmutableDataStructure, immutableDataStructure);
+
+        // then
+        assertThat(diff, //
+            is(ImmutableMap.builder() //
+                .put("S", empty()) //
                 .build()));
     }
 

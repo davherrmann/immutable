@@ -261,7 +261,7 @@ public class Immutable<I>
         }
     }
 
-    interface ImmutableNode
+    public interface ImmutableNode
     {
         Map<String, Object> values();
     }

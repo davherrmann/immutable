@@ -19,8 +19,7 @@ public class ImmutableTypeAdapterTest
         final Immutable<POJO> newImmutable = immutable.in(path::pojo).set(immutable.asObject());
 
         // then
-        assertThat(new Gson().toJson(newImmutable),
-            is("{\"type\":\"de.davherrmann.immutable.ImmutableTypeAdapterTest$POJO\",\"data\":{\"pojo\":{}}}"));
+        assertThat(new Gson().fromJson(new Gson().toJson(newImmutable), Immutable.class), is(newImmutable));
     }
 
     @Test

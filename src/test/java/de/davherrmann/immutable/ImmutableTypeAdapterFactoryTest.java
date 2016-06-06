@@ -24,8 +24,7 @@ public class ImmutableTypeAdapterFactoryTest
     public void write_withEmptyImmutable_writesEmptyObject() throws Exception
     {
         // when / then
-        assertThat(gson.toJson(immutable),
-            is("{\"type\":\"de.davherrmann.immutable.ImmutableTypeAdapterFactoryTest$POJO\",\"data\":{}}"));
+        assertThat(gson.fromJson(gson.toJson(immutable), Immutable.class).values(), is(immutable.values()));
     }
 
     @Test
@@ -36,8 +35,7 @@ public class ImmutableTypeAdapterFactoryTest
             .in(path.name()::firstname).set("Foo");
 
         // then
-        assertThat(gson.toJson(newImmutable),
-            is("{\"type\":\"de.davherrmann.immutable.ImmutableTypeAdapterFactoryTest$POJO\",\"data\":{\"name\":{\"firstname\":\"Foo\"}}}"));
+        assertThat(gson.fromJson(gson.toJson(newImmutable), Immutable.class).values(), is(newImmutable.values()));
     }
 
     @Test
@@ -48,8 +46,7 @@ public class ImmutableTypeAdapterFactoryTest
             .in(path::name).set(name("Foo", "Bar"));
 
         // then
-        assertThat(gson.toJson(newImmutable),
-            is("{\"type\":\"de.davherrmann.immutable.ImmutableTypeAdapterFactoryTest$POJO\",\"data\":{\"name\":{\"firstname\":\"Foo\",\"lastname\":\"Bar\"}}}"));
+        assertThat(gson.fromJson(gson.toJson(newImmutable), Immutable.class).values(), is(newImmutable.values()));
     }
 
     @Test
@@ -61,8 +58,7 @@ public class ImmutableTypeAdapterFactoryTest
             .in(path.name()::lastname).set("B");
 
         // then
-        assertThat(gson.toJson(newImmutable),
-            is("{\"type\":\"de.davherrmann.immutable.ImmutableTypeAdapterFactoryTest$POJO\",\"data\":{\"name\":{\"firstname\":\"Foo\",\"lastname\":\"B\"}}}"));
+        assertThat(gson.fromJson(gson.toJson(newImmutable), Immutable.class).values(), is(newImmutable.values()));
     }
 
     @Test
@@ -73,10 +69,10 @@ public class ImmutableTypeAdapterFactoryTest
             .inList(path::names).set(newArrayList( //
                 name("A", "AFoo").asObject(), //
                 name("B", "BFoo").asObject()));
-
+        System.out.println(gson.toJson(newImmutable));
         // then
         assertThat(gson.toJson(newImmutable),
-            is("{\"type\":\"de.davherrmann.immutable.ImmutableTypeAdapterFactoryTest$POJO\",\"data\":{\"names\":[{\"firstname\":\"A\",\"lastname\":\"AFoo\"},{\"firstname\":\"B\",\"lastname\":\"BFoo\"}]}}"));
+            is("{\"type\":\"de.davherrmann.immutable.ImmutableTypeAdapterFactoryTest$POJO\",\"data\":{\"names\":[{\"firstname\":\"A\",\"immutableNode\":true,\"lastname\":\"AFoo\"},{\"firstname\":\"B\",\"immutableNode\":true,\"lastname\":\"BFoo\"}],\"immutableNode\":true}}"));
     }
 
     private Immutable<POJO.Name> name(String firstname, String lastname)

@@ -87,10 +87,16 @@ public class NextImmutable
 
     public void visitNodes(final Map<String, Object> dataStructure, final NodeVisitor nodeVisitor)
     {
-        visitNodes(dataStructure, newArrayList(), nodeVisitor);
+        visitNodes(dataStructure, newArrayList(), nodeVisitor, false);
     }
 
-    private void visitNodes(final Map<?, ?> values, final List<String> path, final NodeVisitor nodeVisitor)
+    public void visitLeafs(final Map<String, Object> dataStructure, final NodeVisitor nodeVisitor)
+    {
+        visitNodes(dataStructure, newArrayList(), nodeVisitor, true);
+    }
+
+    private void visitNodes(final Map<?, ?> values, final List<String> path, final NodeVisitor nodeVisitor,
+        boolean visitLeafsOnly)
     {
         values.entrySet().stream() //
             .filter(e -> !IMMUTABLE_NODE_ENTRY.equals(e)) //
@@ -98,11 +104,18 @@ public class NextImmutable
                 final List<String> nestedPath = newArrayList(path);
                 nestedPath.add(e.getKey().toString());
 
-                nodeVisitor.visit(on(".").join(nestedPath), e.getValue());
-
-                if (e.getValue() instanceof Map)
+                if (!visitLeafsOnly)
                 {
-                    visitNodes((Map<?, ?>) e.getValue(), nestedPath, nodeVisitor);
+                    nodeVisitor.visit(on(".").join(nestedPath), e.getValue());
+                }
+
+                if (isDataStructure(e.getValue()))
+                {
+                    visitNodes((Map<?, ?>) e.getValue(), nestedPath, nodeVisitor, visitLeafsOnly);
+                }
+                else if (visitLeafsOnly)
+                {
+                    nodeVisitor.visit(on(".").join(nestedPath), e.getValue());
                 }
             });
     }
